@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Login</title>
+        <script src="http://connect.soundcloud.com/sdk.js"></script>
+        <script>
+        // initialize client with app credentials
+        SC.initialize({
+          client_id: '409c3af74ca1b9c3a0934253233d9f04',
+          redirect_uri: 'http://tunnel.madeye.io:43967/loggedin.html'
+        });
+        
+        // initiate auth popup
+        SC.connect(function() {
+        //   SC.get('/me', function(me) { 
+        //     alert('Hello, ' + me.username); 
+        //   });
+          
+          SC.get('/tracks', { q: 'buskers', license: 'cc-by-sa' }, function(tracks) {
+              tracks = console.log(tracks);
+          });
+        });
+        </script>
+    </head>
+    <body>
+        Hello
+    </body>
+</html>

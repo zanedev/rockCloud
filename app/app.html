@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>famo.us App</title>
+        <meta name="viewport" content="width=device-width, maximum-scale=1, user-scalable=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+        <!-- shims for backwards compatibility -->
+        <script type="text/javascript" src="http://code.famo.us/lib/functionPrototypeBind.js"></script>
+        <script type="text/javascript" src="http://code.famo.us/lib/classList.js"></script>
+        <script type="text/javascript" src="http://code.famo.us/lib/requestAnimationFrame.js"></script>
+
+        <!-- module loader -->
+        <script type="text/javascript" src="http://code.famo.us/lib/require.js"></script>
+
+        <!-- famous -->
+        <link rel="stylesheet" type="text/css" href="http://code.famo.us/famous/0.2.0/famous.css" />
+        <script type="text/javascript" src="http://code.famo.us/famous/0.2.0/famous.min.js"></script>
+
+        <!-- app code -->
+        <link rel="stylesheet" type="text/css" href="css/app.css" />
+        <link rel="stylesheet" type="text/css" href="css/styles.css" />
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+
+        <script src="http://connect.soundcloud.com/sdk.js"></script>
+        <script>
+
+        // initialize client with app credentials
+        SC.initialize({
+          client_id: '409c3af74ca1b9c3a0934253233d9f04',
+          redirect_uri: 'http://tunnel.madeye.io:43967/loggedin.html'
+        });
+
+        var albumTracks;
+        // initiate auth popup
+        SC.connect(function() {
+        //   SC.get('/me', function(me) { 
+        //     alert('Hello, ' + me.username); 
+        //   });
+          
+          SC.get('/tracks', { q: 'skrillex', license: 'cc-by-sa' }, function(tracks) {
+              console.log(tracks);
+              art = _.map(tracks, function(track){
+                return track["artwork_url"];
+              });
+              window.albumArtwork = [];
+              art = _.filter(art, function(url){
+                 if (url == null || url == undefined){
+                     return false;
+                 }
+                 else {
+                     return true;
+                 }
+              });
+
+              for (var i=0; i< art.length; i++){
+                 if (i%3 == 0)
+                    albumArtwork[Math.floor(i/3)] = [];
+                 albumArtwork[Math.floor(i/3)].push(art[i]); 
+              }
+              albumTracks = tracks;
+
+
+              require.config({
+                  baseUrl: './src/'
+              });
+              require(['main']);
+
+          });
+        });
+            
+        </script>
+    </head>
+    <body></body>
+</html>
